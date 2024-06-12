@@ -1,0 +1,337 @@
+    1  sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib      build-essential chrpath socat libsdl1.2-dev xterm
+    2  apt install Git 1.8.3.1 
+    3  apt install Git
+    4  sudo apt install Git
+    5  git
+    6  git -version
+    7  git --version
+    8  tar --version
+    9  python --version
+   10  python3 --version
+   11  gcc  --version
+   12  GNU make--version
+   13  GNU make --version
+   14  GNU  --version
+   15  make --version
+   16  git clone git://git.yoctoproject.org/poky
+   17  ls
+   18  mkdir yocto
+   19  mv -rf poky ./yocto
+   20  mv  poky ./yocto
+   21  ls
+   22  cd yocto
+   23  ls
+   24  cd poky
+   25  git checkout -b mickledore
+   26  pwd
+   27  ls
+   28  source oe-init-build-env 
+   29  bitbake
+   30  ls
+   31  cd ..
+   32  ls
+   33  git clone git://git.yoctoproject.org/poky -b mickledore
+   34  git clone git://git.yoctoproject.org/poky -b mickledore -f
+   35  git clone git://git.yoctoproject.org/poky -b mickledore 
+   36  git clone git://git.yoctoproject.org/poky branch -b mickledore 
+   37  git clone -b mickledore git://git.yoctoproject.org/poky
+   38  git clone -b dunfell git://git.yoctoproject.org/poky
+   39  sudo apt install make python3-pip inkscape texlive-latex-extra
+   40  sudo pip3 install sphinx sphinx_rtd_theme pyyaml
+   41  sudo apt build-dep qemu
+   42  git clone -b dunfell git://git.yoctoproject.org/poky
+   43  git clone git://git.yoctoproject.org/poky
+   44  git init
+   45  gitinit
+   46  git
+   47  cd ..
+   48  git clone -b mickledore git://git.yoctoproject.org/poky
+   49  git clone git://git.yoctoproject.org/poky
+   50  git --version
+   51  sudo apt install git
+   52  sudo apt upgrade
+   53  mkdir yocto
+   54  cd ../../
+   55  mkdir sources
+   56  cd sources/
+   57  ls
+   58  pwd
+   59  sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd liblz4-tool
+   60  sudo apt install pylint3
+   61  sudo apt install pylint
+   62  cd ..
+   63  ls
+   64  cd poky
+   65  ls
+   66  source oe-init-build-env 
+   67  bitbake
+   68  cd ../../
+   69  ls
+   70  rm -rf poky/
+   71  ls
+   72  git clone git://git.yoctoproject.org/poky -b kirkstone
+   73  cd poky
+   74  ls
+   75  source oe-init-build-env 
+   76  bitbake
+   77  export LC_ALL="en_US.UTF-8"
+   78  [200~export LC_CTYPE="en_US.UTF-8"
+   79  export LC_CTYPE="en_US.UTF-8"
+   80  sudo dpkg-reconfigure locales
+   81  bitbake
+   82  exit
+   83  cd ../../
+   84  ls
+   85  cd sources
+   86  ls
+   87  pwd
+   88  ls
+   89  cd tmp
+   90  ls
+   91  cd deploy
+   92  ls
+   93  cd images
+   94  ls
+   95  cd beaglebone-yocto/
+   96  ls
+   97  pwd
+   98  readlink -f core-image-full-cmdline-beaglebone-yocto.wic
+   99  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=1M
+  100  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=64k
+  101  sync
+  102  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=64k && sync
+  103  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=4096 && sync
+  104  su
+  105  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic.bmp of=/media/sdb bs=4096 && sync
+  106  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic.bmap of=/media/sdb bs=4096 && sync
+  107  sudo apt install dd
+  108  dd
+  109  dd --help
+  110  dd --help tail
+  111  dd --help | tail
+  112  sudo dd bs=4M if=./.wic of=/dev/sdx status=progress && sync
+  113  ls
+  114  sudo dd bs=4M if=./core-image-full-cmdline-beaglebone-yocto.wic of=/dev/sdx status=progress && sync
+  115  sudo dd bs=64 if=./core-image-full-cmdline-beaglebone-yocto.wic of=/dev/sdx status=progress && sync
+  116  ls
+  117  sudo dd if=/dev/zero of=/dev/sdb bs=4096
+  118  ls
+  119  cd ../../../
+  120  sudo apt install gparted
+  121  sudo mkdir yocto
+  122  cd yocto
+  123  sud0 git clone git://git.yoctoproject.org/poky
+  124  sudo git clone git://git.yoctoproject.org/poky
+  125  cd poky
+  126  source oe-init-build-env 
+  127  cd ..
+  128  chmod -Rf poky
+  129  chmod -Rf +777 poky
+  130  source oe-init-build-env 
+  131  cd poky/
+  132  source oe-init-build-env 
+  133  nano /etc/sudoers
+  134  sudo nano /etc/sudoers
+  135  sudo adduser root vboxuser
+  136  source oe-init-build-env 
+  137  ls
+  138  cd ..
+  139  chmod -Rf +777 yocto/
+  140  ls
+  141  cd yocto
+  142  cd poky
+  143  source oe-init-build-env 
+  144  su
+  145  source oe-init-build-env 
+  146  bitbake core-image-full-cmdline
+  147  bitbake
+  148  bitbake core-image-full-cmdline
+  149  sudo locale-gen en_US.UTF-8
+  150  bitbake core-image-full-cmdline
+  151  cd ..
+  152  ls
+  153  rm -rf poky
+  154  ls
+  155  sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev python3-subunit mesa-common-dev zstd liblz4-tool file locales
+  156  ls
+  157  git clone git://git.yoctoproject.org/poky
+  158  ls
+  159  cd poky
+  160  git checkout tags/yocto-2.4.2 -b poky_2.4.
+  161  git checkout tags/yocto-2.4.2 -b poky_2.4
+  162  git branch
+  163  git branch -r
+  164  git checkout -b mickledore
+  165  git branch
+  166  git pull
+  167  git pull -r mickledore
+  168  git pull -r origin/mickledore
+  169  git status
+  170  cd ..
+  171  ls
+  172  rm -rf poky
+  173  ls
+  174  git clone git://git.yoctoproject.org/poky -b mickledore
+  175  cd poky
+  176  source oe-init-build-env 
+  177  bitbake
+  178  su
+  179  cd ..
+  180  cd /
+  181  mkdir yocto
+  182  sudo mkdir yocto
+  183  ls
+  184  cd yocto
+  185  ls
+  186  git clone git://git.yoctoproject.org/poky
+  187  sudo git clone git://git.yoctoproject.org/poky
+  188  su
+  189  ls
+  190  cd ~
+  191  ls
+  192  cd yocto
+  193  ls
+  194  cd poky
+  195  ls
+  196  source oe-init-build-env 
+  197  bitbake core-image-full-cmdline
+  198  bitbake
+  199  export LC_ALL="en_US.UTF-8"
+  200  export LC_CTYPE="en_US.UTF-8"
+  201  bitbake
+  202  bitbake core-image-full-cmdline
+  203  ls
+  204  bitbake core-image-full-cmdline
+  205  ls
+  206  cd tmp
+  207  ls
+  208  cd ..
+  209  ls
+  210  cd yocto/sources/tmp/
+  211  ls
+  212  cd deploy/
+  213  ls
+  214  cd images/beaglebone-yocto/
+  215  ls
+  216  ls -lart
+  217  sudo dd bs=4M if=./core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/dev/sdx status=progress && sync
+  218  ls
+  219  ls -lart | grep *.wic
+  220  ls -lart | grep ./*.wic
+  221  ls -lart | grep "*.wic"
+  222  ls -lart | grep ".wic"
+  223  sudo dd bs=4M if=./core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/dev/sdb status=progress && sync
+  224  ls
+  225  claer
+  226  clear
+  227  cd ../../../../../
+  228  ls
+  229  cd poky
+  230  ls
+  231  rm -rf meta_mylayer/
+  232  ls
+  233  cd meta-mylayer/
+  234  ls
+  235  nano README 
+  236  cd ../../../../../
+  237  ls
+  238  cd poky
+  239  ls
+  240  source build
+  241  source oe-init-build-env 
+  242  bitbake-layers show-layers
+  243  bitbake-layers create-layer ../meta_mylayer
+  244  bitbake-layers create-layer ../meta-mylayer
+  245  bitbake-layers add-layer ../meta-mylayer
+  246  bitbake-layers show-layers
+  247  bitbake example
+  248  clear
+  249  export LC_ALL="en_US.UTF-8"
+  250  bitbake example
+  251  ./bin/bitbake --version
+  252  cd ..
+  253  ls
+  254  tree meta-mylayer
+  255  sudo apt intall tree
+  256  sudo apt install tree
+  257  tree meta-mylayer
+  258  cd meta-layers
+  259  cd meta-mylayer/
+  260  ls
+  261  cd recipes-example/
+  262  ls
+  263  mkdir iles
+  264  ls
+  265  rm -rf iles/
+  266  mkdir files
+  267  rm -rf files
+  268  ls
+  269  cd example/
+  270  mkdir files
+  271  ls
+  272  ls
+  273  s
+  274  ld
+  275  ls
+  276  ll
+  277  cd yoc
+  278  cd yocto/
+  279  ls
+  280  cd poky
+  281  ls
+  282  clear
+  283  ls
+  284  source oe-init-build-env 
+  285  bitbake example
+  286  export LC_ALL="en_US.UTF-8"
+  287  bitbake example
+  288  ls
+  289  bitbake example
+  290  bitbake hello
+  291  bitbake ${D}
+  292  bitbake --help
+  293  bitbake core-image-full-cmdline
+  294  ls
+  295  cd ..
+  296  ls
+  297  cd sources/
+  298  ls
+  299  cd tmp/deploy/images/beaglebone-yocto/
+  300  ls
+  301  ll
+  302  bitbake example
+  303  ls
+  304  cd yocto
+  305  ls
+  306  cd sources
+  307  ls
+  308  cd tmp
+  309  ls
+  310  cd deploy
+  311  ls
+  312  cd images
+  313  ls
+  314  cd beaglebone-yocto/
+  315  ll
+  316  dd if=core-image-full-cmdline-beaglebone-yocto-20231008123233.rootfs.wic of=/medi/sdb bs=4M && sync
+  317  dd if=core-image-full-cmdline-beaglebone-yocto-20231008123233.rootfs.wic of=/media/sdb bs=4M && sync
+  318  sudo dd if=core-image-full-cmdline-beaglebone-yocto-20231008123233.rootfs.wic of=/media/sdb bs=4M && sync
+  319  sudo dd if=core-image-full-cmdline-beaglebone-yocto-20231008123233.rootfs.wic of=/media/sdb bs=4096 status=progress && sync
+  320  cd ../../../
+  321  cd work
+  322  ls
+  323  cd beaglebone_yocto-poky-linux-gnueabi
+  324  ls
+  325  clear
+  326  cd ..
+  327  ls
+  328  cd deploy/
+  329  ls
+  330  cd images/beaglebone-yocto/
+  331  ll
+  332  sudo dd if=core-image-full-cmdline-beaglebone-yocto-20231008123233.rootfs.wic of=/media/sdb bs=4096 status=progress && sync
+  333  sudo dd if=core-image-full-cmdline-beaglebone-yocto-20231009162955.rootfs.wic of=/media/sdb bs=4096 status=progress && sync
+  334  sudo dd bs=4M if=./core-image-full-cmdline-beaglebone-yocto-20231009162955.rootfs.wic of=/dev/sdb status=progress && sync
+  335  history
+  336  history | less
+  337  history > ~/Desktop/history1.txt

@@ -1,0 +1,216 @@
+https://www.linkedin.com/pulse/yocto-embedded-linux-building-your-own-first-image-raspberry-haddad?utm_source=share&utm_medium=member_ios&utm_campaign=share_via
+
+https://github.com/Munawar-git/YoctoTutorials/blob/master/00_Yocto_Intro/00-Yocto-Intro.md
+
+Code Files/meta-packt_rpi/recipes-example/example
+https://github.com/PacktPublishing/Yocto-for-Raspberry-Pi/tree/master/Code%20Files/meta-packt_rpi/recipes-example/example
+
+sudo dd if=rpi-hwup-image-raspberrypi3.rpi-sdimg of=/dev/sdb bs=4096 && sync
+sudo dd bs=4M if=./tisdk-default-image-am64xx-evm.wic of=/dev/sdx status=progress && sync
+export LC_ALL="en_US.UTF-8"
+runqemu
+IMAGE_INSTALL:append = " hello"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sudo apt-get install gawk wget git-core diffstat unzip texinfo gcc-multilib      build-essential chrpath socat libsdl1.2-dev xterm
+    2  apt install Git 1.8.3.1 
+    3  apt install Git
+    4  sudo apt install Git
+    5  git
+    6  git -version
+    7  git --version
+    8  tar --version
+    9  python --version
+   10  python3 --version
+   11  gcc  --version
+   12  GNU make--version
+   13  GNU make --version
+   14  GNU  --version
+   15  make --version
+   16  git clone git://git.yoctoproject.org/poky
+   17  ls
+   18  mkdir yocto
+   19  mv -rf poky ./yocto
+   20  mv  poky ./yocto
+   21  ls
+   22  cd yocto
+   23  ls
+   24  cd poky
+   25  git checkout -b mickledore
+   26  pwd
+   27  ls
+   28  source oe-init-build-env 
+   29  bitbake
+   30  ls
+   31  cd ..
+   32  ls
+   33  git clone git://git.yoctoproject.org/poky -b mickledore
+   34  git clone git://git.yoctoproject.org/poky -b mickledore -f
+   35  git clone git://git.yoctoproject.org/poky -b mickledore 
+   36  git clone git://git.yoctoproject.org/poky branch -b mickledore 
+37  git clone -b mickledore git://git.yoctoproject.org/poky
+   38  git clone -b dunfell git://git.yoctoproject.org/poky
+   39  sudo apt install make python3-pip inkscape texlive-latex-extra
+   40  sudo pip3 install sphinx sphinx_rtd_theme pyyaml
+   41  sudo apt build-dep qemu
+   42  git clone -b dunfell git://git.yoctoproject.org/poky
+   43  git clone git://git.yoctoproject.org/poky
+   44  git init
+   45  gitinit
+   46  git
+   47  cd ..
+   48  git clone -b mickledore git://git.yoctoproject.org/poky
+   49  git clone git://git.yoctoproject.org/poky
+   50  git --version
+   51  sudo apt install git
+   52  sudo apt upgrade
+   53  mkdir yocto
+   54  cd ../../
+   55  mkdir sources
+   56  cd sources/
+   57  ls
+   58  pwd
+   59  sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev zstd liblz4-tool
+   60  sudo apt install pylint3
+   61  sudo apt install pylint
+   62  cd ..
+   63  ls
+   64  cd poky
+   65  ls
+   66  source oe-init-build-env 
+   67  bitbake
+   68  cd ../../
+   69  ls
+   70  rm -rf poky/
+   71  ls
+72  git clone git://git.yoctoproject.org/poky -b kirkstone
+   73  cd poky
+   74  ls
+   75  source oe-init-build-env 
+   76  bitbake
+   77  export LC_ALL="en_US.UTF-8"
+   78  ESC[200~export LC_CTYPE="en_US.UTF-8"
+   79  export LC_CTYPE="en_US.UTF-8"
+   80  sudo dpkg-reconfigure locales
+   81  bitbake
+   82  exit
+   83  cd ../../
+   84  ls
+   85  cd sources
+   86  ls
+   87  pwd
+   88  ls
+   89  cd tmp
+   90  ls
+   91  cd deploy
+   92  ls
+   93  cd images
+   94  ls
+   95  cd beaglebone-yocto/
+   96  ls
+   97  pwd
+   98  readlink -f core-image-full-cmdline-beaglebone-yocto.wic
+   99  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=1M
+  100  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=64k
+  101  sync
+  102  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=64k && sync
+  103  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic of=/media/sdb bs=4096 && sync
+  104  su
+  105  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic.bmp of=/media/sdb bs=4096 && sync
+  106  sudo dd if=/home/vboxuser/yocto/sources/tmp/deploy/images/beaglebone-yocto/core-image-full-cmdline-beaglebone-yocto-20231007132551.rootfs.wic.bmap of=/media/sdb bs=4096 && sync
+  107  sudo apt install dd
+  108  dd
+  109  dd --help
+  110  dd --help tail
+  111  dd --help | tail
+  112  sudo dd bs=4M if=./.wic of=/dev/sdx status=progress && sync
+  113  ls
+  114  sudo dd bs=4M if=./core-image-full-cmdline-beaglebone-yocto.wic of=/dev/sdx status=progress && sync
+  115  sudo dd bs=64 if=./core-image-full-cmdline-beaglebone-yocto.wic of=/dev/sdx status=progress && sync
+  116  ls
+  117  sudo dd if=/dev/zero of=/dev/sdb bs=4096
+  118  ls
+  119  cd ../../../
+  120  sudo apt install gparted
+  121  sudo mkdir yocto
+  122  cd yocto
+  123  sud0 git clone git://git.yoctoproject.org/poky
+  124  sudo git clone git://git.yoctoproject.org/poky
+  125  cd poky
+  126  source oe-init-build-env 
+  127  cd ..
+  128  chmod -Rf poky
+  129  chmod -Rf +777 poky
+  130  source oe-init-build-env 
+  131  cd poky/
+  132  source oe-init-build-env 
+  133  nano /etc/sudoers
+  134  sudo nano /etc/sudoers
+  135  sudo adduser root vboxuser
+  136  source oe-init-build-env 
+  137  ls
+  173  ls
+  174  git clone git://git.yoctoproject.org/poky -b mickledore
+  175  cd poky
+  176  source oe-init-build-env 
+  177  bitbake
+  178  su
+  179  cd ..
+  180  cd /
+  181  mkdir yocto
+  182  sudo mkdir yocto
+  183  ls
+  184  cd yocto
+  185  ls
+  186  git clone git://git.yoctoproject.org/poky
+  187  sudo git clone git://git.yoctoproject.org/poky
+  188  su
+  189  ls
+  190  cd ~
+  191  ls
+  192  cd yocto
+  193  ls
+  194  cd poky
+  195  ls
+  196  source oe-init-build-env 
+  197  bitbake core-image-full-cmdline
+  198  bitbake
+  199  export LC_ALL="en_US.UTF-8"
+  200  export LC_CTYPE="en_US.UTF-8"
+  201  bitbake
+  202  bitbake core-image-full-cmdline
+  203  ls
+  204  bitbake core-image-full-cmdline
+  205  ls
+  206  cd tmp
+  207  ls
+  208  cd ..
+
+/home/vboxuser/yocto/sources/tmp/work/cortexa8hf-neon-poky-linux-gnueabi
+
+

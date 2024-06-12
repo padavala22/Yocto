@@ -1,0 +1,4 @@
+https://software-dl.ti.com/processor-sdk-linux-rt/esd/AM437X/08_02_00_24/exports/docs/linux/Overview_Building_the_SDK.html#overview-building-the-sdk
+https://www.linkedin.com/pulse/yocto-embedded-linux-building-your-own-first-image-raspberry-haddad?utm_source=share&utm_medium=member_ios&utm_campaign=share_via
+https://www.youtube.com/watch?v=-atEGK1DzIQ
+https://www.youtube.com/watch?si=_rW4gU4AX9V5CJ7D&v=zuZtIR3IUlY&feature=youtu.bEhttps://www.youtube.com/watch?si=KwfC_t3n3n9ufxwY&v=S7Yle8clJ30&feature=youtu.be

@@ -1,0 +1,402 @@
+From 292c62d2d72c2a3684f3e3879d7f8ca35a56f8d9 Mon Sep 17 00:00:00 2001
+From: Shashank Kulkarni <s-kulkarni@ti.com>
+Date: Fri, 31 Mar 2023 19:37:46 +0530
+Subject: [PATCH] SCK: 1. NAND Boot works - ECC errors seen when jumping from
+ SPL to U-Boot 2. U-Boot is able to E-R-W the NAND Flash 3. Boot media is
+ printed on the SPL Log 4. Pinmux, DTS and board based on AM43xx EVM
+
+---
+ arch/arm/dts/am437x-gp-evm.dts    | 14 ++++---
+ arch/arm/mach-omap2/boot-common.c |  9 ++++-
+ board/ti/am43xx/board.c           | 52 +++++++++++++++++++++---
+ board/ti/am43xx/mux.c             | 10 +++--
+ board/ti/common/board_detect.c    |  9 +++--
+ include/configs/am43xx_evm.h      | 67 ++++++++++++++++++-------------
+ 6 files changed, 114 insertions(+), 47 deletions(-)
+
+diff --git a/arch/arm/dts/am437x-gp-evm.dts b/arch/arm/dts/am437x-gp-evm.dts
+index 3c500d52db..6bc4f14e10 100644
+--- a/arch/arm/dts/am437x-gp-evm.dts
++++ b/arch/arm/dts/am437x-gp-evm.dts
+@@ -45,7 +45,7 @@
+ 		regulator-always-on;
+ 		regulator-boot-on;
+ 		enable-active-high;
+-		gpio = <&gpio5 7 GPIO_ACTIVE_HIGH>;
++		gpio = <&gpio4 15 GPIO_ACTIVE_HIGH>;
+ 	};
+ 
+ 	vmmcwl_fixed: fixedregulator-mmcwl {
+@@ -222,7 +222,7 @@
+ 
+ 	nand_flash_x8: nand_flash_x8 {
+ 		pinctrl-single,pins = <
+-			0x26c(PIN_OUTPUT_PULLDOWN | MUX_MODE7)	/* spi2_cs0.gpio/eMMCorNANDsel */
++			//0x26c(PIN_OUTPUT_PULLDOWN | MUX_MODE7)	/* spi2_cs0.gpio/eMMCorNANDsel */
+ 			0x0  (PIN_INPUT  | MUX_MODE0)	/* gpmc_ad0.gpmc_ad0 */
+ 			0x4  (PIN_INPUT  | MUX_MODE0)	/* gpmc_ad1.gpmc_ad1 */
+ 			0x8  (PIN_INPUT  | MUX_MODE0)	/* gpmc_ad2.gpmc_ad2 */
+@@ -231,8 +231,10 @@
+ 			0x14 (PIN_INPUT  | MUX_MODE0)	/* gpmc_ad5.gpmc_ad5 */
+ 			0x18 (PIN_INPUT  | MUX_MODE0)	/* gpmc_ad6.gpmc_ad6 */
+ 			0x1c (PIN_INPUT  | MUX_MODE0)	/* gpmc_ad7.gpmc_ad7 */
+-			0x70 (PIN_INPUT_PULLUP | MUX_MODE0)	/* gpmc_wait0.gpmc_wait0 */
+-			0x74 (PIN_OUTPUT_PULLUP | MUX_MODE7)	/* gpmc_wpn.gpmc_wpn */
++			//0x70 (PIN_INPUT_PULLUP | MUX_MODE0)	/* gpmc_wait0.gpmc_wait0 */
++			//0x74 (PIN_OUTPUT_PULLUP | MUX_MODE7)	/* gpmc_wpn.gpmc_wpn */
++			0x88 (PIN_INPUT_PULLUP | MUX_MODE1)	/* gpmc_csn3.gpmc_wait0 */
++			//0x2c (PIN_OUTPUT_PULLUP | MUX_MODE7)	/* gpmc_wpn.gpmc_wpn */
+ 			0x7c (PIN_OUTPUT | MUX_MODE0)		/* gpmc_csn0.gpmc_csn0  */
+ 			0x90 (PIN_OUTPUT | MUX_MODE0)		/* gpmc_advn_ale.gpmc_advn_ale */
+ 			0x94 (PIN_OUTPUT | MUX_MODE0)		/* gpmc_oen_ren.gpmc_oen_ren */
+@@ -667,7 +669,7 @@
+ 	ranges = <0 0 0 0x01000000>;	/* minimum GPMC partition = 16MB */
+ 	nand@0,0 {
+ 		reg = <0 0 4>;		/* device IO registers */
+-		ti,nand-ecc-opt = "bch16";
++		ti,nand-ecc-opt = "bch8";
+ 		ti,elm-id = <&elm>;
+ 		nand-bus-width = <8>;
+ 		gpmc,device-width = <1>;
+@@ -742,7 +744,7 @@
+ };
+ 
+ &dss {
+-	status = "ok";
++	status = "disabled";
+ 
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&dss_pins>;
+diff --git a/arch/arm/mach-omap2/boot-common.c b/arch/arm/mach-omap2/boot-common.c
+index f264e3ec91..2d4be5eaa6 100644
+--- a/arch/arm/mach-omap2/boot-common.c
++++ b/arch/arm/mach-omap2/boot-common.c
+@@ -22,6 +22,9 @@
+ #include <i2c.h>
+ #include <remoteproc.h>
+ 
++#define DEBUG
++//#define _DEBUG
++
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+ #define IPU1_LOAD_ADDR         (0xa17ff000)
+@@ -49,7 +52,7 @@ void save_omap_boot_params(void)
+ 
+ 	boot_device = omap_boot_params->boot_device;
+ 	boot_mode = MMCSD_MODE_UNDEFINED;
+-
++	printf("Boot mode as per device is %d\r\n",boot_mode);
+ 	/* Boot device */
+ 
+ #ifdef BOOT_DEVICE_NAND_I2C
+@@ -192,6 +195,10 @@ void save_omap_boot_params(void)
+ #ifdef CONFIG_SPL_BUILD
+ u32 spl_boot_device(void)
+ {
++	if(gd->arch.omap_boot_device == (BOOT_DEVICE_NAND + 1)) {
++		gd->arch.omap_boot_device = BOOT_DEVICE_NAND;
++	}
++	printf("Boot mode as per spl_boot_device is %d\r\n",gd->arch.omap_boot_device);
+ 	return gd->arch.omap_boot_device;
+ }
+ 
+diff --git a/board/ti/am43xx/board.c b/board/ti/am43xx/board.c
+index d14355aacd..50ef79da32 100644
+--- a/board/ti/am43xx/board.c
++++ b/board/ti/am43xx/board.c
+@@ -47,11 +47,14 @@ static struct ctrl_dev *cdev = (struct ctrl_dev *)CTRL_DEVICE_BASE;
+ #ifdef CONFIG_TI_I2C_BOARD_DETECT
+ void do_board_detect(void)
+ {
++	#if 1
++	//shashank
+ 	/* Ensure I2C is initialized for EEPROM access*/
+ 	gpi2c_init();
+ 	if (ti_i2c_eeprom_am_get(CONFIG_EEPROM_BUS_ADDRESS,
+ 				 CONFIG_EEPROM_CHIP_ADDRESS))
+ 		printf("ti_i2c_eeprom_init failed\n");
++	#endif
+ }
+ #endif
+ 
+@@ -187,11 +190,11 @@ const struct ctrl_ioregs ioregs_ddr3 = {
+ 	.dt1ioctl		= DDR3_DATA0_IOCTRL_VALUE,
+ 	.dt2ioctrl		= DDR3_DATA0_IOCTRL_VALUE,
+ 	.dt3ioctrl		= DDR3_DATA0_IOCTRL_VALUE,
+-	.emif_sdram_config_ext	= 0xc163,
++	.emif_sdram_config_ext	= 0x2c163,//shashank - 0xc163,
+ };
+ 
+ const struct emif_regs ddr3_emif_regs_400Mhz = {
+-	.sdram_config			= 0x638413B2,
++	.sdram_config			= 0x61A05332,//shashank - 0x638413B2,
+ 	.ref_ctrl			= 0x00000C30,
+ 	.sdram_tim1			= 0xEAAAD4DB,
+ 	.sdram_tim2			= 0x266B7FDA,
+@@ -217,7 +220,7 @@ const struct emif_regs ddr3_emif_regs_400Mhz = {
+ 
+ /* EMIF DDR3 Configurations are different for beta AM43X GP EVMs */
+ const struct emif_regs ddr3_emif_regs_400Mhz_beta = {
+-	.sdram_config			= 0x638413B2,
++	.sdram_config			= 0x61A05332,//shashank - 0x638413B2,
+ 	.ref_ctrl			= 0x00000C30,
+ 	.sdram_tim1			= 0xEAAAD4DB,
+ 	.sdram_tim2			= 0x266B7FDA,
+@@ -240,7 +243,7 @@ const struct emif_regs ddr3_emif_regs_400Mhz_beta = {
+ 
+ /* EMIF DDR3 Configurations are different for production AM43X GP EVMs */
+ const struct emif_regs ddr3_emif_regs_400Mhz_production = {
+-	.sdram_config			= 0x638413B2,
++	.sdram_config			= 0x61A05332,//shashank - 0x638413B2,
+ 	.ref_ctrl			= 0x00000C30,
+ 	.sdram_tim1			= 0xEAAAD4DB,
+ 	.sdram_tim2			= 0x266B7FDA,
+@@ -315,16 +318,20 @@ static const struct emif_regs ddr3_idk_emif_regs_400Mhz = {
+ 
+ void emif_get_ext_phy_ctrl_const_regs(const u32 **regs, u32 *size)
+ {
++	#if 0
++	shashank
+ 	if (board_is_eposevm()) {
+ 		*regs = ext_phy_ctrl_const_base_lpddr2;
+ 		*size = ARRAY_SIZE(ext_phy_ctrl_const_base_lpddr2);
+ 	}
++	#endif
+ 
+ 	return;
+ }
+ 
+ const struct dpll_params *get_dpll_ddr_params(void)
+ {
++	#if 0
+ 	int ind = get_sys_clk_index();
+ 
+ 	if (board_is_eposevm())
+@@ -336,6 +343,9 @@ const struct dpll_params *get_dpll_ddr_params(void)
+ 
+ 	printf(" Board '%s' not supported\n", board_ti_get_name());
+ 	return NULL;
++	#endif
++
++	return &gp_evm_dpll_ddr;
+ }
+ 
+ 
+@@ -528,16 +538,39 @@ void set_mux_conf_regs(void)
+ static void enable_vtt_regulator(void)
+ {
+ 	u32 temp;
+-
++	#if 0
+ 	/* enable module */
+ 	writel(GPIO_CTRL_ENABLEMODULE, AM33XX_GPIO5_BASE + OMAP_GPIO_CTRL);
+-
++	
+ 	/* enable output for GPIO5_7 */
+ 	writel(GPIO_SETDATAOUT(7),
+ 	       AM33XX_GPIO5_BASE + OMAP_GPIO_SETDATAOUT);
+ 	temp = readl(AM33XX_GPIO5_BASE + OMAP_GPIO_OE);
+ 	temp = temp & ~(GPIO_OE_ENABLE(7));
+ 	writel(temp, AM33XX_GPIO5_BASE + OMAP_GPIO_OE);
++	#endif
++
++	/* enable module */
++	writel(GPIO_CTRL_ENABLEMODULE, AM33XX_GPIO4_BASE + OMAP_GPIO_CTRL);
++	
++	/* enable output for GPIO4_15 */
++	writel(GPIO_SETDATAOUT(15),
++	       AM33XX_GPIO4_BASE + OMAP_GPIO_SETDATAOUT);
++	temp = readl(AM33XX_GPIO4_BASE + OMAP_GPIO_OE);
++	temp = temp & ~(GPIO_OE_ENABLE(15));
++	writel(temp, AM33XX_GPIO4_BASE + OMAP_GPIO_OE);
++
++	/* NAND WP - enable module */
++	writel(GPIO_CTRL_ENABLEMODULE, AM33XX_GPIO0_BASE + OMAP_GPIO_CTRL);
++	
++	/* enable output for GPIO0_27 */
++	writel(GPIO_SETDATAOUT(27),
++	       AM33XX_GPIO0_BASE + OMAP_GPIO_SETDATAOUT);
++	temp = readl(AM33XX_GPIO0_BASE + OMAP_GPIO_OE);
++	temp = temp & ~(GPIO_OE_ENABLE(27));
++	writel(temp, AM33XX_GPIO0_BASE + OMAP_GPIO_OE);
++
++
+ }
+ 
+ enum {
+@@ -603,6 +636,8 @@ void sdram_init(void)
+ 	 * GP EMV has 1GB DDR3 connected to EMIF
+ 	 * along with VTT regulator.
+ 	 */
++
++	#if 0 
+ 	if (board_is_eposevm()) {
+ 		config_ddr(0, &ioregs_lpddr2, NULL, NULL, &emif_regs_lpddr2, 0);
+ 	} else if (board_is_evm_14_or_later()) {
+@@ -624,6 +659,11 @@ void sdram_init(void)
+ 		config_ddr(400, &ioregs_ddr3, NULL, NULL,
+ 			   &ddr3_idk_emif_regs_400Mhz, 0);
+ 	}
++	#endif
++
++	enable_vtt_regulator();
++	config_ddr(0, &ioregs_ddr3, NULL, NULL,
++		&ddr3_emif_regs_400Mhz, 0);
+ }
+ #endif
+ 
+diff --git a/board/ti/am43xx/mux.c b/board/ti/am43xx/mux.c
+index f59e93a0eb..f03f40c61c 100644
+--- a/board/ti/am43xx/mux.c
++++ b/board/ti/am43xx/mux.c
+@@ -93,8 +93,8 @@ static struct module_pin_mux nand_pin_mux[] = {
+ 	{OFFSET(gpmc_ad14),	(MODE(0) | PULLUDDIS | RXACTIVE)}, /* AD14 */
+ 	{OFFSET(gpmc_ad15),	(MODE(0) | PULLUDDIS | RXACTIVE)}, /* AD15 */
+ #endif
+-	{OFFSET(gpmc_wait0),	(MODE(0) | RXACTIVE | PULLUP_EN)}, /* Wait */
+-	{OFFSET(gpmc_wpn),	(MODE(7) | PULLUP_EN)},	/* Write Protect */
++	{OFFSET(gpmc_csn3),	(MODE(1) | RXACTIVE | PULLUP_EN)}, /* Wait */
++	{OFFSET(gpmc_ad11),	(MODE(7) | PULLUP_EN | RXACTIVE)},	/* Write Protect */
+ 	{OFFSET(gpmc_csn0),	(MODE(0) | PULLUP_EN)},	/* Chip-Select */
+ 	{OFFSET(gpmc_wen),	(MODE(0) | PULLDOWN_EN)}, /* Write Enable */
+ 	{OFFSET(gpmc_oen_ren),	(MODE(0) | PULLDOWN_EN)}, /* Read Enable */
+@@ -124,7 +124,10 @@ void enable_board_pin_mux(void)
+ 	configure_module_pin_mux(mmc0_pin_mux);
+ 	configure_module_pin_mux(i2c0_pin_mux);
+ 	configure_module_pin_mux(mdio_pin_mux);
+-
++#if defined(CONFIG_MTD_RAW_NAND)
++		configure_module_pin_mux(nand_pin_mux);
++#endif
++/*
+ 	if (board_is_evm()) {
+ 		configure_module_pin_mux(gpio5_7_pin_mux);
+ 		configure_module_pin_mux(rgmii1_pin_mux);
+@@ -145,6 +148,7 @@ void enable_board_pin_mux(void)
+ 		configure_module_pin_mux(qspi_pin_mux);
+ #endif
+ 	}
++*/	
+ }
+ 
+ void enable_i2c0_pin_mux(void)
+diff --git a/board/ti/common/board_detect.c b/board/ti/common/board_detect.c
+index 8b3b4bc825..8383a262a0 100644
+--- a/board/ti/common/board_detect.c
++++ b/board/ti/common/board_detect.c
+@@ -269,7 +269,7 @@ already_set:
+ 
+ int __maybe_unused ti_i2c_eeprom_am_get(int bus_addr, int dev_addr)
+ {
+-	int rc;
++	/*int rc;*/
+ 	struct ti_am_eeprom am_ep;
+ 	struct ti_common_eeprom *ep;
+ 
+@@ -286,13 +286,14 @@ int __maybe_unused ti_i2c_eeprom_am_get(int bus_addr, int dev_addr)
+ 	ep->serial[0] = 0x0;
+ 	ep->config[0] = 0x0;
+ 
+-	rc = ti_i2c_eeprom_get(bus_addr, dev_addr, TI_EEPROM_HEADER_MAGIC,
++	/*rc = ti_i2c_eeprom_get(bus_addr, dev_addr, TI_EEPROM_HEADER_MAGIC,
+ 			       sizeof(am_ep), (uint8_t *)&am_ep);
+ 	if (rc)
+-		return rc;
++		return rc;*/
+ 
+ 	ep->header = am_ep.header;
+-	strlcpy(ep->name, am_ep.name, TI_EEPROM_HDR_NAME_LEN + 1);
++	//strlcpy(ep->name, am_ep.name, TI_EEPROM_HDR_NAME_LEN + 1);
++	strlcpy(ep->name, "AM43__GP", TI_EEPROM_HDR_NAME_LEN + 1);
+ 	ti_eeprom_string_cleanup(ep->name);
+ 
+ 	/* BeagleBone Green '1' eeprom, board_rev: 0x1a 0x00 0x00 0x00 */
+diff --git a/include/configs/am43xx_evm.h b/include/configs/am43xx_evm.h
+index 587eff1cff..8735b2e9db 100644
+--- a/include/configs/am43xx_evm.h
++++ b/include/configs/am43xx_evm.h
+@@ -203,40 +203,53 @@
+ /* NAND support */
+ #ifdef CONFIG_MTD_RAW_NAND
+ /* NAND: device related configs */
+-#define CONFIG_SYS_NAND_PAGE_SIZE	4096
+-#define CONFIG_SYS_NAND_OOBSIZE		224
+-#define CONFIG_SYS_NAND_BLOCK_SIZE	(256*1024)
++#define CONFIG_SYS_NAND_PAGE_SIZE	2048//4096
++#define CONFIG_SYS_NAND_OOBSIZE		64//224
++#define CONFIG_SYS_NAND_BLOCK_SIZE	(128*1024)
+ #define CONFIG_SYS_NAND_PAGE_COUNT	(CONFIG_SYS_NAND_BLOCK_SIZE / \
+ 					 CONFIG_SYS_NAND_PAGE_SIZE)
+ #define CONFIG_SYS_NAND_5_ADDR_CYCLE
+ /* NAND: driver related configs */
+ #define CONFIG_SYS_NAND_ONFI_DETECTION
+-#define CONFIG_NAND_OMAP_ECCSCHEME	OMAP_ECC_BCH16_CODE_HW
++#define CONFIG_NAND_OMAP_ECCSCHEME	OMAP_ECC_BCH8_CODE_HW
+ #define CONFIG_SYS_NAND_BAD_BLOCK_POS	NAND_LARGE_BADBLOCK_POS
+-#define CONFIG_SYS_NAND_ECCPOS	{ 2, 3, 4, 5, 6, 7, 8, 9, \
+-				10, 11, 12, 13, 14, 15, 16, 17, 18, 19, \
+-				20, 21, 22, 23, 24, 25, 26, 27, 28, 29, \
+-				30, 31, 32, 33, 34, 35, 36, 37, 38, 39, \
+-				40, 41, 42, 43, 44, 45, 46, 47, 48, 49, \
+-				50, 51, 52, 53, 54, 55, 56, 57, 58, 59, \
+-				60, 61, 62, 63, 64, 65, 66, 67, 68, 69, \
+-				70, 71, 72, 73, 74, 75, 76, 77, 78, 79, \
+-				80, 81, 82, 83, 84, 85, 86, 87, 88, 89, \
+-				90, 91, 92, 93, 94, 95, 96, 97, 98, 99, \
+-			100, 101, 102, 103, 104, 105, 106, 107, 108, 109, \
+-			110, 111, 112, 113, 114, 115, 116, 117, 118, 119, \
+-			120, 121, 122, 123, 124, 125, 126, 127, 128, 129, \
+-			130, 131, 132, 133, 134, 135, 136, 137, 138, 139, \
+-			140, 141, 142, 143, 144, 145, 146, 147, 148, 149, \
+-			150, 151, 152, 153, 154, 155, 156, 157, 158, 159, \
+-			160, 161, 162, 163, 164, 165, 166, 167, 168, 169, \
+-			170, 171, 172, 173, 174, 175, 176, 177, 178, 179, \
+-			180, 181, 182, 183, 184, 185, 186, 187, 188, 189, \
+-			190, 191, 192, 193, 194, 195, 196, 197, 198, 199, \
+-			200, 201, 202, 203, 204, 205, 206, 207, 208, 209, \
+-			}
++//#if 0
++// #define CONFIG_SYS_NAND_ECCPOS	{ 2, 3, 4, 5, 6, 7, 8, 9, \
++// 				10, 11, 12, 13, 14, 15, 16, 17, 18, 19, \
++// 				20, 21, 22, 23, 24, 25, 26, 27, 28, 29, \
++// 				30, 31, 32, 33, 34, 35, 36, 37, 38, 39, \
++// 				40, 41, 42, 43, 44, 45, 46, 47, 48, 49, \
++// 				50, 51, 52, 53, 54, 55, 56, 57, 58, 59, \
++// 				60, 61, 62, 63, 64, 65, 66, 67, 68, 69, \
++// 				70, 71, 72, 73, 74, 75, 76, 77, 78, 79, \
++// 				80, 81, 82, 83, 84, 85, 86, 87, 88, 89, \
++// 				90, 91, 92, 93, 94, 95, 96, 97, 98, 99, \
++// 			100, 101, 102, 103, 104, 105, 106, 107, 108, 109, \
++// 			110, 111, 112, 113, 114, 115, 116, 117, 118, 119, \
++// 			120, 121, 122, 123, 124, 125, 126, 127, 128, 129, \
++// 			130, 131, 132, 133, 134, 135, 136, 137, 138, 139, \
++// 			140, 141, 142, 143, 144, 145, 146, 147, 148, 149, \
++// 			150, 151, 152, 153, 154, 155, 156, 157, 158, 159, \
++// 			160, 161, 162, 163, 164, 165, 166, 167, 168, 169, \
++// 			170, 171, 172, 173, 174, 175, 176, 177, 178, 179, \
++// 			180, 181, 182, 183, 184, 185, 186, 187, 188, 189, \
++// 			190, 191, 192, 193, 194, 195, 196, 197, 198, 199, \
++// 			200, 201, 202, 203, 204, 205, 206, 207, 208, 209, \
++// 			}
++// #define CONFIG_SYS_NAND_ECCSIZE		512
++// #define CONFIG_SYS_NAND_ECCBYTES	26
++//#else
++#define CONFIG_SYS_NAND_ECCPOS		{ 2, 3, 4, 5, 6, 7, 8, 9, \
++					 10, 11, 12, 13, 14, 15, 16, 17, \
++					 18, 19, 20, 21, 22, 23, 24, 25, \
++					 26, 27, 28, 29, 30, 31, 32, 33, \
++					 34, 35, 36, 37, 38, 39, 40, 41, \
++					 42, 43, 44, 45, 46, 47, 48, 49, \
++					 50, 51, 52, 53, 54, 55, 56, 57, }
++
+ #define CONFIG_SYS_NAND_ECCSIZE		512
+-#define CONFIG_SYS_NAND_ECCBYTES	26
++#define CONFIG_SYS_NAND_ECCBYTES	14
++//#endif
+ #define CONFIG_SYS_NAND_U_BOOT_OFFS	0x00180000
+ /* NAND: SPL related configs */
+ /* NAND: SPL falcon mode configs */
+-- 
+2.24.3
+
